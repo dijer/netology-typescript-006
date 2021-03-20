@@ -19,6 +19,7 @@ export class BooksService {
 
   getBook(id: string): IBook {
     const book = this.books.find(({ id: bookId }: IBook) => id === bookId);
+    console.log(book);
     return book;
   }
 

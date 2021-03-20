@@ -1,10 +1,10 @@
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { LoggerMiddleware } from './common/logger.middleware';
-import { BooksService } from './books/books.service';
+import { BooksModule } from './books/books.module';
 import { BooksController } from './books/books.controller';
 
 @Module({
-  imports: [BooksService],
+  imports: [BooksModule],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

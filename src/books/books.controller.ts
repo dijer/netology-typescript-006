@@ -1,7 +1,15 @@
-import { Body, Controller, Delete, Get, Param, Post } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { IBook } from './books.interface';
 import { BooksService } from './books.service';
-import { CreateBookDto } from './create-book.dto';
+import { BookDto } from './book.dto';
 
 @Controller('books')
 export class BooksController {
@@ -10,7 +18,7 @@ export class BooksController {
   }
 
   @Post()
-  async create(@Body() CreateBookDto: CreateBookDto) {
+  async create(@Body() CreateBookDto: BookDto) {
     this.booksService.createBook(CreateBookDto);
   }
 
@@ -19,33 +27,20 @@ export class BooksController {
     return this.booksService.getBooks();
   }
 
-  @Get(':id')
+  @Get('/:id')
   async getBook(@Param() params): Promise<IBook> {
     return this.booksService.getBook(params.id);
   }
 
-  @Get()
-  async updateBook(@Param() params): Promise<IBook> {
-    const {
-      id,
-      title,
-      description,
-      authors,
-      favorite,
-      fileCover,
-      fileName,
-    } = params;
-    return this.booksService.updateBook(id, {
-      title,
-      description,
-      authors,
-      favorite,
-      fileCover,
-      fileName,
-    });
+  @Put('/:id')
+  async updateBook(
+    @Param() params,
+    @Body() UpdateBookDto: BookDto,
+  ): Promise<IBook> {
+    return this.booksService.updateBook(params.id, UpdateBookDto);
   }
 
-  @Delete()
+  @Delete('/:id')
   async deleteBook(@Param() params): Promise<void> {
     return this.booksService.deleteBook(params.id);
   }
