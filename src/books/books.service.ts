@@ -1,58 +1,38 @@
 import { Injectable } from '@nestjs/common';
 import { IBook } from './books.interface';
-import { Book, IBookData } from './books.model';
-import { booksStore } from './books.mocks';
+import { Book, IBookData } from './books.schema';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class BooksService {
-  private readonly books: IBook[] = booksStore;
+  constructor(
+    @InjectModel(Book.name)
+    private BookModel: Model<IBook>,
+  ) {}
 
-  createBook(bookData: IBookData): IBook {
-    const book = new Book(bookData);
-    this.books.push(book);
+  public async createBook(bookData: IBookData): Promise<IBook> {
+    const book = new this.BookModel(bookData);
+    await book.save();
     return book;
   }
 
-  getBooks(): IBook[] {
-    return this.books;
+  public async getBooks(): Promise<IBook[]> {
+    const books = await this.BookModel.find();
+    return books;
   }
 
-  getBook(id: string): IBook {
-    const book = this.books.find(({ id: bookId }: IBook) => id === bookId);
-    console.log(book);
+  public async getBook(id: string): Promise<IBook> {
+    const book = await this.BookModel.findById(id);
     return book;
   }
 
-  updateBook(id: string, data: IBookData): IBook {
-    const book = this.getBook(id);
-    const { title, description, authors, favorite, fileCover, fileName } = data;
-    if (typeof title === 'string') {
-      book.title = title;
-    }
-    if (typeof description === 'string') {
-      book.description = description;
-    }
-    if (typeof authors === 'string') {
-      book.authors = authors;
-    }
-    if (typeof favorite === 'string') {
-      book.favorite = favorite;
-    }
-    if (typeof fileCover === 'string') {
-      book.fileCover = fileCover;
-    }
-    if (typeof fileName === 'string') {
-      book.fileName = fileName;
-    }
+  public async updateBook(id: string, data: IBookData): Promise<IBook> {
+    const book = await this.BookModel.findByIdAndUpdate(id, data);
     return book;
   }
 
-  deleteBook(id: string) {
-    const bookIndex = this.books.findIndex(
-      ({ id: bookId }: IBook) => bookId === id,
-    );
-    if (bookIndex !== -1) {
-      this.books.splice(bookIndex, 1);
-    }
+  public async deleteBook(id: string): Promise<void> {
+    await this.BookModel.deleteOne({ _id: id });
   }
 }

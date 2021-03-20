@@ -1,4 +1,7 @@
 import { NestFactory } from '@nestjs/core';
+import * as dotenv from 'dotenv';
+import * as path from 'path';
+dotenv.config({ path: path.resolve(__dirname + './../.env') });
 import { AppModule } from './app.module';
 
 async function bootstrap() {
