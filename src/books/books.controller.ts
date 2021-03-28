@@ -6,16 +6,20 @@ import {
   Param,
   Post,
   Put,
+  UsePipes,
 } from '@nestjs/common';
 import { IBook } from './books.interface';
 import { BooksService } from './books.service';
 import { BookDto } from './book.dto';
+import { BookValidationParamPipe } from '../common/pipes/book-validation-param.pipe';
+import { BookValidationPipe } from '../common/pipes/book-validation.pipe';
 
 @Controller('books')
 export class BooksController {
   constructor(private booksService: BooksService) {}
 
   @Post()
+  @UsePipes(BookValidationPipe)
   async create(@Body() CreateBookDto: BookDto) {
     return await this.booksService.createBook(CreateBookDto);
   }
@@ -26,11 +30,13 @@ export class BooksController {
   }
 
   @Get('/:id')
+  @UsePipes(BookValidationParamPipe)
   async getBook(@Param() params): Promise<IBook> {
     return await this.booksService.getBook(params.id);
   }
 
   @Put('/:id')
+  @UsePipes(BookValidationPipe)
   async updateBook(
     @Param() params,
     @Body() UpdateBookDto: BookDto,
