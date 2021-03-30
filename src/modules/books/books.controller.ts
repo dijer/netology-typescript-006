@@ -11,10 +11,10 @@ import {
 import { IBook } from './books.interface';
 import { BooksService } from './books.service';
 import { BookDto } from './book.dto';
-import { BookValidationParamPipe } from '../common/pipes/book-validation-param.pipe';
-import { BookValidationPipe } from '../common/pipes/book-validation.pipe';
+import { BookValidationParamPipe } from '../../common/pipes/book-validation-param.pipe';
+import { BookValidationPipe } from '../../common/pipes/book-validation.pipe';
 
-@Controller('books')
+@Controller('/api/books')
 export class BooksController {
   constructor(private booksService: BooksService) {}
 

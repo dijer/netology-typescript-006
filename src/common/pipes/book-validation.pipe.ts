@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
-import { IBookData } from '../../books/books.schema';
+import { IBookData } from '../../modules/books/books.schema';
 
 @Injectable()
 export class BookValidationPipe implements PipeTransform<IBookData> {
