@@ -7,7 +7,7 @@ const saltOrRounds = +process.env.SALT;
 export class PasswordHashPipe implements PipeTransform {
   async transform(data: any) {
     const { password } = data;
-    if (typeof password === 'string') {
+    if (typeof password === 'string' && password.length) {
       const passwordHash = await bcrypt.hash(password, saltOrRounds);
       return {
         ...data,

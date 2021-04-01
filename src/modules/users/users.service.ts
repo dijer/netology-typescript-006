@@ -1,12 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { IUser } from './users.interface';
-import { User, IUserData } from './users.schema';
+import { User } from './users.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import * as jwt from 'jsonwebtoken';
-import { SigninRequestDto } from './dto/signin.dto';
-
-const JWT_SECRET = process.env.JWT_SECRET;
+import { SignupRequestDto } from './signup.dto';
 
 @Injectable()
 export class UsersService {
@@ -15,41 +12,18 @@ export class UsersService {
     private UserModel: Model<IUser>,
   ) {}
 
-  public async createUser(userData: IUserData): Promise<string> {
-    const user = new this.UserModel(userData);
+  public async createUser(data: SignupRequestDto): Promise<Partial<IUser>> {
+    const user = new this.UserModel(data);
     await user.save();
-    return user._id;
+    const userCopy = user.toObject();
+    delete userCopy.password;
+    return userCopy;
   }
 
   public async getUserByEmail(email: string): Promise<IUser> {
-    const user = this.UserModel.findOne({
-      email,
-    });
-    return user;
-  }
-
-  public async signin({ email, password }: SigninRequestDto) {
-    const user = await this.getUserByEmail(email);
-    const token = jwt.sign(
-      {
-        id: user._id,
-      },
-      JWT_SECRET,
-    );
-    return {
-      id: user._id,
-      token,
-    };
-  }
-
-  async validateUser(email: string, password: string): Promise<any> {
     const user = await this.UserModel.findOne({
       email,
     });
-    if (user && user.password === password) {
-      const { password: undef, ...result } = user;
-      return result;
-    }
-    return null;
+    return user;
   }
 }
