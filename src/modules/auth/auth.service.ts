@@ -28,7 +28,7 @@ export class AuthService {
         {
           id: user._id,
           email: user.email,
-          password: user.password,
+          firstName: user.firstName,
         },
         JWT_SECRET,
       );

@@ -8,7 +8,6 @@ import {
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { SigninRequestDto } from '../auth/signin.dto';
-import { PasswordHashPipe } from '../../common/pipes/passwordHash.pipe';
 import { EmailValidationPipe } from '../../common/pipes/email-validator.pipe';
 import { AuthService } from './auth.service';
 
