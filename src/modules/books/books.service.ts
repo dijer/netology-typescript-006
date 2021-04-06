@@ -27,7 +27,10 @@ export class BooksService {
     return book;
   }
 
-  public async updateBook(id: string, data: IBookData): Promise<IBook> {
+  public async updateBook(
+    id: string,
+    data: Partial<IBookData>,
+  ): Promise<IBook> {
     const book = await this.BookModel.findByIdAndUpdate(id, data);
     return book;
   }
