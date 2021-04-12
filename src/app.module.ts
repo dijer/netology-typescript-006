@@ -5,6 +5,7 @@ import { BooksController } from './modules/books/books.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { BookCommentModule } from './modules/book-comment/book-comment.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { AuthModule } from './modules/auth/auth.module';
     BooksModule,
     UsersModule,
     AuthModule,
+    BookCommentModule,
   ],
 })
 export class AppModule implements NestModule {
