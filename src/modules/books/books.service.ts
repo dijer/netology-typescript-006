@@ -11,7 +11,15 @@ export class BooksService {
   }
 
   public async getBooks() {
-    const books = (await admin.database().ref('books').once('value')).val();
+    const db = admin.database();
+    const books = [];
+    const res = (await db.ref('books').once('value')).val();
+    for (const i in res) {
+      books.push({
+        id: i,
+        ...res[i],
+      });
+    }
     return books;
   }
 
