@@ -25,13 +25,13 @@ export class BooksController {
   }
 
   @Get()
-  async findAll(): Promise<IBook[]> {
+  async findAll() {
     return await this.booksService.getBooks();
   }
 
   @Get('/:id')
   @UsePipes(BookValidationParamPipe)
-  async getBook(@Param() params): Promise<IBook> {
+  async getBook(@Param() params) {
     return await this.booksService.getBook(params.id);
   }
 
