@@ -1,12 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import * as admin from 'firebase-admin';
 import { IBookData } from './books.schema';
+import { nanoid } from 'nanoid';
 
 @Injectable()
 export class BooksService {
   public async createBook(bookData: IBookData) {
     const db = admin.database();
-    const book = (await db.ref('books').push(bookData).once('value')).val();
+    const id = nanoid();
+    const book = (
+      await db
+        .ref('books')
+        .push({
+          ...bookData,
+          id,
+        })
+        .once('value')
+    ).val();
     return book;
   }
 
@@ -16,7 +26,7 @@ export class BooksService {
     const res = (await db.ref('books').once('value')).val();
     for (const i in res) {
       books.push({
-        id: i,
+        index: i,
         ...res[i],
       });
     }
@@ -24,7 +34,8 @@ export class BooksService {
   }
 
   public async getBook(id: string) {
-    const book = await admin.database().ref('books').child(id).once('value');
+    const db = admin.database();
+    const book = await db.ref('books').child(id).once('value');
     return book;
   }
 
