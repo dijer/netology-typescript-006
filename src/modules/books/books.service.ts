@@ -20,7 +20,7 @@ export class BooksService {
     return book;
   }
 
-  public async getBooks() {
+  public async getBooks(): Promise<any> {
     const db = admin.database();
     const books = [];
     const res = (await db.ref('books').once('value')).val();
@@ -33,13 +33,13 @@ export class BooksService {
     return books;
   }
 
-  public async getBook(id: string) {
+  public async getBook(id: string): Promise<any> {
     const db = admin.database();
     const book = await db.ref('books').child(id).once('value');
     return book;
   }
 
-  public async updateBook(id: string, data: Partial<IBookData>) {
+  public async updateBook(id: string, data: Partial<IBookData>): Promise<any> {
     const book = await admin.database().ref('books').child(id).update(data);
     return book;
   }

@@ -1,14 +1,23 @@
 import { NestFactory } from '@nestjs/core';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
-dotenv.config({ path: path.resolve(__dirname + './../.env') });
+dotenv.config({ path: path.resolve(__dirname + './../../.env') });
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/exceptions/http.exception-filter';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
+import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
+import * as express from 'express';
+import { Express } from 'express';
+import { ExpressAdapter } from '@nestjs/platform-express';
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+const server: Express = express();
+
+async function bootstrap(expressInstance: Express) {
+  const app = await NestFactory.create(
+    AppModule,
+    new ExpressAdapter(expressInstance),
+  );
   app.useGlobalInterceptors(new ResponseInterceptor());
   app.useGlobalFilters(new HttpExceptionFilter());
 
@@ -25,4 +34,5 @@ async function bootstrap() {
 
   await app.listen(3000);
 }
-bootstrap();
+bootstrap(server);
+exports.widgets = functions.https.onRequest(server);
