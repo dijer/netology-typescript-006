@@ -10,7 +10,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
   public catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
-    const statusCode = exception.getStatus();
+    const statusCode = 'getStatus' in exception ? exception.getStatus() : 404;
 
     response.status(statusCode).json({
       data: exception.message,
