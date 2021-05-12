@@ -17,12 +17,7 @@ export class ResponseInterceptor implements NestInterceptor {
         data,
       })),
       catchError((err) =>
-        throwError(
-          new InternalServerErrorException({
-            status: 'fail',
-            data: err.message,
-          }),
-        ),
+        throwError(new InternalServerErrorException(err.message)),
       ),
     );
   }

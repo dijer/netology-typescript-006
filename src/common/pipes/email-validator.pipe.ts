@@ -6,11 +6,10 @@ import {
 } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
-import { IBookData } from '../../modules/books/books.schema';
 
 @Injectable()
-export class BookValidationPipe implements PipeTransform<IBookData> {
-  async transform(value: IBookData, { metatype }: ArgumentMetadata) {
+export class EmailValidationPipe implements PipeTransform {
+  async transform(value: any, { metatype }: ArgumentMetadata) {
     if (!metatype || !this.toValidate(metatype)) {
       return value;
     }
@@ -18,7 +17,7 @@ export class BookValidationPipe implements PipeTransform<IBookData> {
     const object = plainToClass(metatype, value);
     const errors = await validate(object);
     if (errors.length > 0) {
-      throw new BadRequestException('Validation failed');
+      throw new BadRequestException('Email validation failed');
     }
 
     return value;
